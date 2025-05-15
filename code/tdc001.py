@@ -7,6 +7,7 @@ Remaining Documentation in thorlabs-apt-device.readthedocs.io website
 
 #all the imports this script needs lol
 import time
+from serial.tools import list_ports
 from thorlabs_apt_device import TDC001
 
 #initializing stage globally for easy access, setting to none for now, will be changed in the future
@@ -88,11 +89,44 @@ def move_relative(counts):
 
 
 """
+def detect_multi_thorlabs()
+-go through all serial ports, list all devices
+-identify which serial ports are connected to thorlabs devices
+-return thorlabs devices as a list of objects that contain portinfo
+-this function is mostly UNIVERSAL for detecting any device with a vendor_id, and is super useful, can be used in future projects
+""" 
+def detect_multi_thorlabs(vendor_ids=[1027,4883]):
+    #pyserial is useful, their website for documentation is https://pyserial.readthedocs.io/en/latest/pyserial.html 
+    #I note another option is pyvisa, which is agnostic to the type of communication device and can use gpib,ethernet, everything and isn't messy
+    #they also have a git repo for more useful info, https://github.com/pyserial/pyserial/tree/master/serial/tools 
+    #this has a main function in the script list_ports.py that returns ListPortInfo objects for each port (a class object, refer to object oriented programming)
+    #ListPortInfo objects have parameters: device,name,description,hwid,vid (vendor id), pid (product id), serial_number, location, manufacturer, product, interface 
+    #https://pyserial.readthedocs.io/en/latest/tools.html has this information if you need to read up on it
+    #print(list_ports.comports()) #this prints out a big list of ListPortInfo objects
+    
+    device_list = [] #create an empty list to populate with devices that match vendor id
+
+    for port in list_ports.comports():
+        #print(port.vid) #useful for repurposing this code for other things, for the TDC001, it returns a vendor id of 1027, which is why I set to default, 4883 is another one that appears, these also may be in hexidecimal (1027 = 0x0403)
+        if port.vid in vendor_ids: # https://www.w3schools.com/python/python_lists_access.asp
+            device_list.append(port)  #self explanatory
+    
+    return device_list
+
+
+"""
 main()
     -main method for this file, will be shifted to run if filename==main in the future
     -mostly useful just for debugging this controller, will be controlled by a higher level class in the future 
 """
+
 def main():
+    print(detect_multi_thorlabs())
+    
+
+
+
+    """
     #set up a connection between controller and system
     initialize(homing=False)
     time.sleep(.5)
@@ -114,7 +148,8 @@ def main():
         move_relative(target)
     stage.close()
     print("Goodbye!")
+    """
 
 
 main() 
-
+ 
