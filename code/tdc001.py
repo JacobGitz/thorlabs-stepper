@@ -1,6 +1,6 @@
 """tdc_controller.py – Simple, well‑commented helper for ThorLabs **TDC001** cubes.
 
-Author: Jacob Lazarchik (2025) • Edited by ChatGPT‑o3
+Author: Jacob Lazarchik (2025)
 
 This file intentionally trades *brevity* for *clarity*: every time a new Python
 concept is introduced, we put a short inline comment right next to it.  That
