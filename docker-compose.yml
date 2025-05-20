@@ -2,13 +2,20 @@
 services:
   tdc:
     build: .
-    image: tdc-controller:lock      # or: build: .
+    image: tdc-controller:lock  # or: build: .
     # give the container USB + TTY devices
+    tty: true
+    
     privileged: true                # easiest “all /dev” switch, gives access to all usb devices
-    devices:                        # (optional) extra explicit char devices
-      - /dev/ttyUSB0
-      - /dev/ttyUSB1
+    #devices:                        # (optional) extra explicit char devices
+      #- /dev/ttyUSB0
+      #- /dev/ttyUSB1
     volumes:                        # expose the USB bus tree
       - /dev/bus/usb:/dev/bus/usb
     stdin_open: true                # -it equivalents
-    tty: true
+    group_add:
+      - dialout
+    environment:
+      - PYTHONUNBUFFERED=1
+    #command: ["sleep","infinity"] #overrides cmd in dockerfile and makes it sleep forever so it doesn't bug out automatically
+      
