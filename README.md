@@ -19,15 +19,11 @@
 
 <!-- Project Title -->
 <div align="center">
-  <a href="https://github.com/JacobGitz/TDC001-Docker">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
+  <img src="Documentation/images/logo.png" alt="Logo" width="500">
   <h3 align="center">TDC001-Docker</h3>
   <p align="center">
     Dockerized FastAPI + Python control of the Thorlabs TDC001 Stepper Controller
-    <br />
-    <a href="https://github.com/JacobGitz/TDC001-Docker"><strong>Explore the docs »</strong></a>
-    <br /><br />
+    <br>
     <a href="https://github.com/JacobGitz/TDC001-Docker/issues">Report Bug</a>
     &middot;
     <a href="https://github.com/JacobGitz/TDC001-Docker/issues">Request Feature</a>
@@ -149,8 +145,7 @@ usbipd wsl bind --busid=1-1  (or whatever one you want)</code></pre>
 <!-- USAGE -->
 <h2 id="usage">🚀Other Usage</h2>
 If you wish to run without Docker, you can (ensure you cd into the '/code' directory):
-<pre><code>
-> python(or python3) tdc001.py
+<pre><code>> python(or python3) tdc001.py
 $ python(or python3) tdc001.py (for linux)
 </code></pre>
 <p>The script initializes, connects, and controls the TDC001 stepper.</p>
@@ -160,7 +155,6 @@ $ python(or python3) tdc001.py (for linux)
 <!--<p>Add screenshots to the <code>images/</code> directory and embed like:</p> -->
 <!-- <pre><code>![TDC001 Detected](Documentation/images/tdc001-docker=may24th-demo.png)</code></pre> -->
 <img src="/Documentation/images/tdc001-docker-may24th-demo.png">
-![TDC001 Detected](Documentation/images/tdc001-docker-may24th-demo.png)
 <!-- ROADMAP -->
 <h2 id="roadmap">🗺️ Roadmap</h2>
 <ul>
@@ -169,6 +163,8 @@ $ python(or python3) tdc001.py (for linux)
   <li>[x] Multi-controller support</li>
   <li>[ ] FastAPI backend</li>
   <li>[ ] PyQt frontend</li>
+  <li>[ ] Auto Installer/Config Script</li>
+  <li>[ ] Single Click Desktop Icon</li>
 </ul>
 
 <!-- TROUBLESHOOTING -->
