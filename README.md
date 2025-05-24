@@ -48,7 +48,7 @@
 <!-- ABOUT -->
 <h2 id="about-the-project">📦 About The Project</h2>
 <p>
-This project enables Python + FastAPI control of the Thorlabs TDC001 controller inside a fully Dockerized environment, compatible with Windows via WSL2 and USB/IP passthrough.
+This project enables Python + FastAPI control of the Thorlabs TDC001 controller inside a fully Dockerized environment, compatible with Windows via WSL2 and USB/IP passthrough. Eventually, most of these instructions will be entirely automated; However, for now, this guide should do. 
 </p>
 <p>
 <strong>Docs(I suggest you read the presentation):</strong><br />
