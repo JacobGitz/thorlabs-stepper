@@ -53,7 +53,7 @@ This project enables Python + FastAPI control of the Thorlabs TDC001 controller 
 <p>
 <strong>Docs(I suggest you read the presentation):</strong><br />
 - <a href="https://thorlabs-apt-device.readthedocs.io/en/latest/">APT Python Docs</a><br />
-- <a href="https://docs.google.com/presentation/d/1g8y-PXOg5V4Ve93i1UUEbFeU9zlJ3SWcqfPgaKH4Flg/edit?usp=sharing">"How To Docker #1" Presentation </a> (PDF Included in "/Docs" Directory)<br />
+- <a href="https://docs.google.com/presentation/d/1g8y-PXOg5V4Ve93i1UUEbFeU9zlJ3SWcqfPgaKH4Flg/edit?usp=sharing">"How To Docker #1" Presentation </a> (PDF Included in "/Documentation" Directory with many other useful things)<br />
 - Thorlabs Stepper Notes Doc (ask me for these)
 </p>
 
