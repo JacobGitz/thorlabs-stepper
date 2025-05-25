@@ -148,12 +148,42 @@ usbipd wsl bind --busid=1-1  (or whatever one you want)</code></pre>
 </ol>
 
 <!-- USAGE -->
-<h2 id="usage">🚀Other Usage</h2>
-If you wish to run without Docker, you can (ensure you cd into the '/code' directory):
-<pre><code>> python(or python3) tdc001.py
-$ python(or python3) tdc001.py (for linux)
-</code></pre>
-<p>The script initializes, connects, and controls the TDC001 stepper.</p>
+<h2 id="usage">🚀 Other Usage (Without Docker)</h2>
+<p>
+  If you prefer to run the script without Docker, a full Python virtual environment is included in the <code>/code</code> directory. Follow these instructions based on your system:
+</p>
+
+<ol>
+  <li>
+    <strong>Open a terminal and change to the project directory:</strong>
+    <pre><code>cd TDC001-Docker/code</code></pre>
+  </li>
+
+  <li>
+    <strong>Activate the virtual environment:</strong><br>
+    <ul>
+      <li><strong>On Windows (Command Prompt):</strong>
+        <pre><code>.venv\Scripts\activate</code></pre>
+      </li>
+      <li><strong>On Linux (or WSL):</strong>
+        <pre><code>source venv/bin/activate</code></pre>
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Run the script:</strong><br>
+    After activating the environment, run the script using:
+    <pre><code>python tdc001.py</code></pre>
+    <p>This initializes, connects to, and controls the TDC001 stepper motor controller.</p>
+  </li>
+</ol>
+
+<p>⚠️ If you encounter permission issues on Linux, you can try:</p>
+<ul>
+  <li><code>chmod +x venv/bin/activate</code> &mdash; to make the activation script executable</li>
+  <li>As a last resort, you may prefix commands with <code>sudo</code>, <strong>but this is not recommended for activating virtual environments</strong> since it may break package isolation.</li>
+</ul>
 
 <!-- SCREENSHOTS -->
 <h2 id="screenshots">🖼️ Screenshots</h2>
