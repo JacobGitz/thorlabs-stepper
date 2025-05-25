@@ -214,12 +214,30 @@ usbipd wsl bind --busid=1-1  (or whatever one you want)</code></pre>
 <!-- CONTRIBUTING -->
 <h2 id="contributing">🤝 Contributing</h2>
 <ol>
-  <li>Fork this repo</li>
-  <li>Create a new branch: <code>git checkout -b feature/foo</code></li>
-  <li>Commit: <code>git commit -m "Add foo"</code></li>
-  <li>Push: <code>git push origin feature/foo</code></li>
-  <li>Submit me a pull request on Github</li>
+  <li>Fork this repo using the GitHub “Fork” button.</li>
+  <li>Clone <em>your fork</em> to your local machine:
+    <pre><code>git clone https://github.com/YOUR-USERNAME/TDC001-Docker.git</code></pre>
+  </li>
+  <li>Create a new branch for your feature:
+    <pre><code>git checkout -b feature/foo</code></pre>
+  </li>
+  <li>Commit your changes:
+    <pre><code>git commit -m "Add foo"</code></pre>
+  </li>
+  <li>Push the branch to your fork:
+    <pre><code>git push origin feature/foo</code></pre>
+  </li>
+  <li>Submit a pull request via GitHub.  
+    I suggest selecting the <code>pull-request</code> branch as the target for merging.
+  </li>
 </ol>
+
+<p>🎥 Need help? Here's a quick walkthrough on forking and pull requests:<br>
+<a href="https://youtu.be/jRLGobWwA3Y?si=HNfFBYAfP8CyD_-0" target="_blank" rel="noopener noreferrer">
+Watch: How to Pull Request in 3 Minutes (YouTube)
+</a></p>
+
+<p>🎮 New to Git? Try <a href="https://ohmygit.org/" target="_blank" rel="noopener noreferrer"><strong>Oh My Git!</strong></a> — a fun, open-source game to learn Git concepts interactively.</p>
 
 <!-- LICENSE -->
 <h2 id="license">📜 License</h2>
