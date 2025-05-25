@@ -166,7 +166,7 @@ usbipd wsl bind --busid=1-1  (or whatever one you want)</code></pre>
         <pre><code>.venv\Scripts\activate</code></pre>
       </li>
       <li><strong>On Linux (or WSL):</strong>
-        <pre><code>source venv/bin/activate</code></pre>
+        <pre><code>source .venv/bin/activate</code></pre>
       </li>
     </ul>
   </li>
