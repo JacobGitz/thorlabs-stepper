@@ -112,16 +112,21 @@ usbipd wsl bind --busid=1-1  (or whatever one you want)</code></pre>
   </li>
 </ol>
 
-<h3>Clone + Docker-Compose: </h3>
+<h3>Fork + Clone + Docker-Compose:</h3>
 <ol>
   <li>
-    Clone the GitHub repository:
-    <pre><code>> git clone https://github.com/JacobGitz/TDC001-Docker.git</code></pre>
-    Or use the <a href="https://github.com/apps/desktop" target="_blank" rel="noopener noreferrer">GitHub Desktop app</a> for a graphical interface.
-    This command downloads the full project including the pre-built Docker image and configuration files.
+    First, <strong>fork</strong> this repository to your own GitHub account:<br>
+    Go to <a href="https://github.com/JacobGitz/TDC001-Docker" target="_blank" rel="noopener noreferrer">this GitHub repository</a> and click the <code>Fork</code> button in the top-right corner.
   </li>
   <br>
-  
+  <li>
+    After forking, <strong>clone your own fork</strong> to your local machine:<br>
+    On your forked repository page, click the green <code>Code</code> button, copy the URL, then run the following command in your terminal (replace <code>your-username</code> with your GitHub username):
+    <pre><code>git clone https://github.com/your-username/TDC001-Docker.git</code></pre>
+    Or use the <a href="https://github.com/apps/desktop" target="_blank" rel="noopener noreferrer">GitHub Desktop app</a> for a graphical interface.
+    This will download the full project including the Docker image and configuration files.
+  </li>
+
   <li>
     Make sure you are in the main directory:
     <pre><code>> cd TDC001-Docker </code></pre>
