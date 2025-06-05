@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV '/home/framework/personal/Dutt Laboratory/Projects/servo motor /code/.venv'
+set -gx VIRTUAL_ENV /home/framework/personal/github/TDC001-Docker/Code/.venv
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"bin $PATH
