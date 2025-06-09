@@ -1,7 +1,1 @@
 # .dockerignore
-.git
-**/__pycache__
-**/*.pyc
-code/.venv
-manuals/
-#this is for ignoring certain files for building our dockerfile. Obviously we do not need the venv or other things! 

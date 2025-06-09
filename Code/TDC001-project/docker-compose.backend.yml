@@ -1,0 +1,17 @@
+services:
+  tdc_backend:
+    build: ./Controller+fastapi
+    container_name: tdc_backend
+    restart: unless-stopped
+    privileged: true
+    # expose FastAPI to the LAN
+    ports:
+      - "8000:8000"
+
+    # give the container direct access to the cube
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+
+    # optional but convenient for logs
+    environment:
+      - TZ=America/New_York
