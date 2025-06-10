@@ -24,5 +24,12 @@ RUN if [ "$PIP_NO_INDEX" = "1" ]; then \
 # ───────── runtime ─────────
 ENV PYTHONUNBUFFERED=1
 
+#backends run on port 8000, I prefer the frontends run on 8001
+
+#backends respond with a /ping request with a backend=TDC001 basically (check tdc_server.py)
+
+#as long as your ping request on the fastapi backend returns a relevant thing, like "spincore" or something, then all your docker backends can communicate through port 8000 as far as ik, but it is a personal decision
+
+EXPOSE: 8001/tcp
 # runs the shell script to start this whole thing. 
 ENTRYPOINT ["/start.sh"]

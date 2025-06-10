@@ -1,89 +1,68 @@
 #!/usr/bin/env python3
-"""FastAPI wrapper for Thorlabs **TDC001** with dynamic port selection & Zeroconf."""
-from __future__ import annotations
+"""Unified FastAPI server for Thorlabs TDC001 – v1.4 UI compatible (no Python Zeroconf)"""
 
-import logging, os, socket
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from zeroconf import Zeroconf, ServiceInfo
 from tdc001 import TDCController, find_tdc001_ports
-
-app = FastAPI(title="TDC001 API", version="1.2.0")
+import logging
 
 log = logging.getLogger("tdc-server")
 logging.basicConfig(level=logging.INFO)
 
+app = FastAPI(title="TDC001 API", version="1.4.0")
+
 controller: TDCController | None = None
-zc: Zeroconf | None = None
-svc: ServiceInfo | None = None
 
-# ───────── helpers ─────────
-class SelectPort(BaseModel):
-    port: str
+# ───────────── models ─────────────
 
-def ensure() -> TDCController:
-    if controller is None:
-        raise HTTPException(503, "Not connected — call /connect first")
-    return controller
-#  NEW bits ↓↓↓ – everything else is identical to v1.1  ──────────────────
 class ConnectRequest(BaseModel):
     port: str
 
-class MoveCounts(BaseModel):
-    counts: int
-    
-# ───────── lifecycle ─────────
+class MoveRequest(BaseModel):
+    steps: int
+
+class AbsoluteRequest(BaseModel):
+    position: int
+
+# ───────────── helper ─────────────
+
+def ensure_controller() -> TDCController:
+    if controller is None:
+        raise HTTPException(
+            status_code=503,
+            detail="TDC001 device not connected. Call /ports to see available devices.",
+        )
+    return controller
+
+# ───────────── lifecycle ─────────────
+
 @app.on_event("startup")
-def _start():
-    global zc, svc
-    zc = Zeroconf()
-    ip = os.getenv("ADVERTISE_IP") or socket.gethostbyname(socket.gethostname())
-    svc = ServiceInfo(
-        "_tdc001._tcp.local.",
-        f"TDCBackend-{socket.gethostname()}._tdc001._tcp.local.",
-        addresses=[socket.inet_aton(ip)],
-        port=8000,
-        properties={},
-        server=f"{socket.gethostname()}.local.",
-    )
-    zc.register_service(svc)
-    log.info("Zeroconf advertised at %s:8000", ip)
+def startup_event() -> None:
+    global controller
+    ports = find_tdc001_ports()
+    if not ports:
+        log.warning("No TDC001 cubes detected at startup – API running in degraded mode.")
+        controller = None
+    else:
+        controller = TDCController(serial_port=ports[0])
+        log.info("Connected to TDC001 on %s", ports[0])
 
 @app.on_event("shutdown")
-def _stop():
-    global controller, zc, svc
+def shutdown_event() -> None:
+    global controller
     if controller:
-        controller.close(); controller = None
-    if zc and svc:
-        zc.unregister_service(svc); zc.close()
+        controller.close()
+        controller = None
+        log.info("TDC001 connection closed.")
 
-# ───────── endpoints ─────────
+# ───────────── endpoints ─────────────
+
 @app.get("/ports")
 def list_ports() -> list[str]:
     return find_tdc001_ports()
 
 @app.post("/connect")
-def connect(sel: SelectPort):
-    global controller
-    if controller:
-        controller.close()
-    controller = TDCController(sel.port)
-    return {"status": "connected", "port": sel.port}
-
-@app.post("/disconnect")
-def disconnect():
-    global controller
-    if controller:
-        controller.close(); controller = None
-    return {"status": "disconnected"}
-
-@app.get("/info")
-def info():
-    return {"connected": controller is not None, "port": getattr(controller, "_cube", {}).serial_port if controller else None}
-
-@app.post("/connect")
 def connect(req: ConnectRequest):
-    """Attach to a specific USB port chosen by the GUI."""
     global controller
     try:
         if controller:
@@ -94,15 +73,76 @@ def connect(req: ConnectRequest):
         controller = None
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/disconnect")
+def disconnect():
+    global controller
+    if controller:
+        controller.close()
+        controller = None
+    return {"status": "disconnected"}
 
-# Shorter aliases expected by GUI (keep old routes too)
+@app.get("/status")
+def status():
+    return ensure_controller().status
+
+@app.post("/move_relative")
+def move_relative(req: MoveRequest):
+    ctrl = ensure_controller()
+    try:
+        ctrl.move_relative(req.steps)
+        return {"status": "moved", "steps": req.steps}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/move_absolute")
+def move_absolute(req: AbsoluteRequest):
+    ctrl = ensure_controller()
+    try:
+        ctrl.move_absolute(req.position)
+        return {"status": "moved", "position": req.position}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/home")
+def home():
+    ctrl = ensure_controller()
+    try:
+        ctrl.home()
+        return {"status": "homed"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/identify")
+def identify():
+    ctrl = ensure_controller()
+    ctrl.identify()
+    return {"status": "identifying"}
+
+@app.post("/stop")
+def stop():
+    ctrl = ensure_controller()
+    try:
+        ctrl._cube.stop(immediate=True)
+        return {"status": "stopped"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# ───────────── UI Compatibility Aliases ─────────────
+
 @app.post("/move_rel")
-def move_rel(req: MoveCounts):
-    return move_relative(MoveRequest(steps=req.counts))
+def move_rel_alias(req: MoveRequest):
+    return move_relative(req)
 
 @app.post("/move_abs")
-def move_abs(req: MoveCounts):
-    return move_absolute(AbsoluteRequest(position=req.counts))
-    
-# legacy move/home/identify/stop endpoints unchanged from v1.1 → import below
-from tdc_server_legacy import *  # noqa: F401,F403 (thin wrapper to keep diff small)
+def move_abs_alias(req: AbsoluteRequest):
+    return move_absolute(req)
+
+# ───────────── Optional Health Check ─────────────
+# also an identifier for the frontend to locate the actual TDC001 apis on the network
+# the script will request all port 8000s on the network and send a ping request, waiting for this reply
+# the user will see this as available IPs to connect to for controlling steppers
+
+@app.get("/ping")
+def ping():
+    return {"backend": "TDC001"}
+
