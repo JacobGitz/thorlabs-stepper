@@ -1,6 +1,6 @@
 services:
   tdc_frontend:
-    network_mode: "host"
+    #network_mode: "host" not needed for most things, unclear as to what this entirely does, but the port bridge below works just fine
     build:
       context: ./Gui # path to Dockerfile.gui
       dockerfile: Dockerfile.gui
