@@ -2,9 +2,16 @@
 FROM python:3.13-slim
 
 # Install only what we *actually* need
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libusb-1.0-0 dbus avahi-daemon avahi-utils \
- && rm -rf /var/lib/apt/lists/*
+# Qt + X + noVNC runtime libs
+RUN apt-get update -y && apt-get install -y --no-install-recommends \
+        libx11-6 libxext6 libxrender1 libxkbcommon-x11-0 libxcb-xinerama0 \
+        libegl1 libgl1-mesa-glx \
+        libfontconfig1   \        # ← new
+        libfreetype6     \        # ← new (libfontconfig’s runtime dep)
+        fonts-dejavu-core \       # ← new (gives at least one TTF font)
+        xvfb x11vnc websockify fluxbox \
+        ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 # ───────── copy code ─────────
 WORKDIR /app
 COPY tdc_server.py tdc001.py ./

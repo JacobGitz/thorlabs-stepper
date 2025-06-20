@@ -232,17 +232,36 @@ class MainWindow(QMainWindow):
         st_h.addStretch()
         main_v.addLayout(st_h)
 
-        # Network group
+        # ── Network group ─────────────────────────────────────────────────────
         net_g = QGroupBox("Network")
         net_f = QFormLayout(net_g)
+
+        # Backend combobox – *react on commit only*
         self.cmb_backend = QComboBox()
         self.cmb_backend.setEditable(True)
         self.cmb_backend.setPlaceholderText("http://<ip>:8000")
-        self.cmb_backend.currentTextChanged.connect(self._on_backend_change)
+
+        # disconnect any eager default signal that fires on every keystroke
+        try:
+            self.cmb_backend.currentTextChanged.disconnect()
+        except TypeError:
+            pass  # nothing connected yet – OK
+
+        # ① user picked an item from the drop-down
+        self.cmb_backend.currentIndexChanged.connect(
+            lambda i: self._on_backend_change(self.cmb_backend.itemText(i))
+        )
+        # ② user finished typing and pressed ↵
+        self.cmb_backend.lineEdit().editingFinished.connect(
+            lambda: self._on_backend_change(self.cmb_backend.currentText())
+        )
+
         btn_add = QPushButton("Add Backend")
         btn_add.clicked.connect(self._add_backend)
+
         self.cmb_port = QComboBox()
         self.cmb_port.currentIndexChanged.connect(self._connect_device)
+
         net_f.addRow("Backend:", self.cmb_backend)
         net_f.addRow("", btn_add)
         net_f.addRow("Cube port:", self.cmb_port)
@@ -299,21 +318,19 @@ class MainWindow(QMainWindow):
         self.statusbar = QStatusBar(self)
         self.setStatusBar(self.statusbar)
 
+    # main_window.py
     def _discover_backends(self, hint=None):
-        """Populate backend dropdown: hint, localhost, docker alias, LAN scan."""
-        urls = []
+        """Populate backend dropdown with *verified* TDC001 servers only."""
         if hint and hint != "auto":
-            urls.append(hint)
+            # Still verify the user-supplied hint so we don’t crash later
+            candidates = [hint] if _is_backend(hint, 0.3) else []
         else:
-            urls += ["http://127.0.0.1:8000", "http://host.docker.internal:8000"]
-            try:
-                ip = socket.gethostbyname(socket.gethostname())
-                urls.append(f"http://{ip}:8000")
-            except:
-                pass
-            urls += scan_for_backends()
-        for u in dict.fromkeys(urls):
-            self.cmb_backend.addItem(u)
+            candidates = scan_for_backends()          # already does localhost + host.docker.internal + LAN
+
+        self.cmb_backend.clear()
+        for url in candidates:
+            self.cmb_backend.addItem(url)
+
         if self.cmb_backend.count():
             self._on_backend_change(self.cmb_backend.currentText())
 

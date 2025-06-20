@@ -12,7 +12,7 @@ def main():
     # optional Xvfb+noVNC support for headless Docker
     if os.getenv("USE_NOVNC"):
         if shutil.which("Xvfb") and shutil.which("websockify"):
-            subprocess.Popen(["Xvfb", ":99", "-screen", "0", "1280x800x24"])
+            subprocess.Popen(["Xvfb", ":99", "-screen", "0", "1920x1080x24"])
             subprocess.Popen(["websockify", "6080", "localhost:5900"])
 
     app = QApplication(sys.argv)
