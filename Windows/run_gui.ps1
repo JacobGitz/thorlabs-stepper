@@ -8,7 +8,7 @@
 
 # ───────────────────────── configuration ─────────────────────────
 $composeRelative = "..\Code\TDC001-Project\docker-compose.frontend.yml"
-$service         = "gui"           # docker-compose service name
+$service         = "tdc_frontend"           # docker-compose service name
 $port            = 6080            # noVNC external port
 $shortcutName    = "TDC001 GUI.lnk"
 $iconPath        = "$PSScriptRoot\tdc_gui.ico"  # optional .ico next to this script
