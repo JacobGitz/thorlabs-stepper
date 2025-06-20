@@ -7,7 +7,7 @@
 #>
 
 # ───────────────────────── configuration ─────────────────────────
-$composeRelative = "..\Code\TDC001-Project\Docker-Compose.frontend.yml"
+$composeRelative = "..\Code\TDC001-Project\docker-compose.frontend.yml"
 $service         = "gui"           # docker-compose service name
 $port            = 6080            # noVNC external port
 $shortcutName    = "TDC001 GUI.lnk"
