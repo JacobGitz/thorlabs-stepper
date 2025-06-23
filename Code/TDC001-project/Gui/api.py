@@ -91,7 +91,7 @@ def scan_for_backends(port: int = 8000, timeout: float = 0.25, workers: int = 64
     hosts.extend(f"{prefix}.{i}" for i in range(1, 255))
 
     # ③ common lab sub‑nets ------------------------------------------------------------
-    hosts.extend(f"192.168.{sub}.{i}" for sub in (0, 1) for i in range(1, 255))
+    hosts.extend(f"192.168.{sub}.{i}" for sub in (0, 2) for i in range(1, 255))
     hosts.extend(f"10.0.0.{i}" for i in range(1, 255))
 
     # ─── probe candidates concurrently ─────────────────────────────────────────
