@@ -18,6 +18,8 @@ There is something called usbipd or something in the docker documentation, and s
 
 I supplied notes for this on Windows in my original stable release(main branch readme.md), but not for Linux. It was *partially incorrectly* discussed in the presentation as well. 
 
+(On a side note, I highly suggest you read the How-to-docker presentation in the Documentation directory in this repo)
+
 But, if you run the frontend on a Linux machine, and then the backend on a separate Windows machine (with usbipd-win or whatever I discussed in readme.md) then it will work successfully. 
 
 (backend first, then frontend, otherwise frontend won't see backend, restart frontend container if you cannot find the proper backend)
