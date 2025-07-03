@@ -48,10 +48,11 @@
 <!-- ABOUT -->
 <h2 id="about-the-project">📦 About The Project</h2>
 <p>
-Our goal is a drop-in control stack that can be cloned, rebuilt, and reused for any instrument interface in the laboratory. Each device follows the same two-part pattern: a lean FastAPI container that communicates with the USB hardware, and a lightweight PyQt6 GUI container streamed through noVNC. By swapping out the driver module and UI skin, you can command a motorized stage today, a camera tomorrow, or whatever hardware comes next – without worrying that new code will break existing setups.
+Our goal is a drop-in control stack that can be cloned, rebuilt, and reused for any instrument interface in the laboratory. Each device follows the same two-part pattern: a lean FastAPI container that communicates with the USB hardware, and a lightweight PyQt6 GUI container streamed through noVNC. By swapping out the driver module and UI skin, you can command a motorized stage today, a camera tomorrow, or whatever hardware comes next – without worrying that new code will eventually break.
 </p>
 <p>
 Starting with the <code>main</code> branch (<strong>2025-06</strong> release), the reference implementation targets the Thorlabs TDC001 stepper controller and includes two Docker services:
+<br>
 <br><strong>Backend (FastAPI)</strong> – a REST API (on port <code>8000</code>) that controls any attached TDC001 cube.<br>
 <strong>Frontend (PyQt6 GUI)</strong> – a desktop-style UI rendered in a virtual X11 display and streamed via noVNC (on port <code>6080</code>).
 </p>
@@ -103,7 +104,8 @@ You can run both containers on the same PC or even split them across the network
   <br>
   <li>
     Install <a href="https://github.com/dorssel/usbipd-win" target="_blank" rel="noopener noreferrer">usbipd-win</a> to enable USB passthrough. Then, from an elevated PowerShell or CMD, bind the TDC001's USB port to WSL:
-    <pre><code>usbipd list<br>usbipd wsl bind --busid <em>&lt;BUS-ID&gt;</em></code></pre>
+    <pre><code>    usbipd list 
+    usbipd wsl bind --busid <em>&lt;BUS-ID&gt;</em></code></pre>
     Use <code>usbipd list</code> to find the <em>BUS-ID</em> of the connected TDC001, then bind it so the Linux environment can see it.
     <p><strong>Notes:</strong></p>
     <ul>
@@ -145,13 +147,16 @@ You can run both containers on the same PC or even split them across the network
    Start the back-end and front-end containers (choose the appropriate option for your OS): 
     <ul>
       <li><strong>Linux:</strong> From a terminal, run:
-        <pre><code>Linux/backend-launch.sh<br>Linux/frontend-launch.sh</code></pre>
+        <pre><code>      Linux/backend-launch.sh
+      Linux/frontend-launch.sh</code></pre>
       </li>
       <li><strong>Windows (WSL2):</strong> In PowerShell or CMD, run the provided batch files (this will invoke Docker within WSL):
-        <pre><code>Windows\backend-launch.cmd<br>Windows\frontend-launch.cmd</code></pre>
+        <pre><code>      Windows\backend-launch.cmd
+      Windows\frontend-launch.cmd</code></pre>
       </li>
       <li><strong>macOS:</strong> Run the command scripts:
-        <pre><code>MacOS/backend-launch.command<br>MacOS/frontend-launch.command</code></pre>
+        <pre><code>      MacOS/backend-launch.command
+      MacOS/frontend-launch.command</code></pre>
         <p><em>Note:</em> The backend container must run on a Linux/Windows host for USB support, since Docker on macOS does not support direct USB passthrough. The macOS script above will launch the GUI container locally; you should configure it to connect to a backend running on another machine. Also, these scripts can be clicked to run, but if not, you can make them executable easily with some commands. 
       </li>
     </ul>
@@ -202,7 +207,7 @@ Open a web browser to the GUI’s address (<code>http://&lt;host&gt;:6080</code>
   <li>Choose the TDC001’s serial port from the drop-down menu (click the refresh icon if you just plugged in the device). On Linux the port will look like <code>/dev/ttyUSB0</code>; on Windows via WSL it might appear as a similar device path once forwarded.</li>
   <li>Select a <strong>Steps/mm</strong> preset that matches your stepper’s lead screw pitch (common Thorlabs T-cubes use 0.5&nbsp;mm or 1.0&nbsp;mm lead). You can also choose “Manual set…” and enter a custom steps-per-mm value if needed. This value ensures the GUI can convert step counts to millimeters for display.</li>
   <li>Use the on-screen controls to <strong>Jog</strong> (move relative), <strong>Home</strong> (return to zero), or move to an <strong>Absolute</strong> position. The GUI’s status bar will display the current position and connection status. There’s also an “Identify/Flash” button to make the controller’s LED blink for easy identification.</li>
-  <li><strong>State Saving</strong> Each time you connect or move the device, the GUI saves the session state (selected backend, port, preset, and last known position) to <code>~/.tdc001_state.json</code> in your home directory. On the next launch, the GUI will offer to restore this state — it can automatically reconnect to the same backend and port, reapply your preset, and even return to the last saved position (with safety checks if the device has moved or been re-homed in the meantime). This makes it convenient to power cycle or restart the system and continue where you left off.</li>
+  <li><strong>State Saving (in progress)</strong> Each time you connect or move the device, the GUI saves the session state (selected backend, port, preset, and last known position) to <code>~/.tdc001_state.json</code> in your home directory. On the next launch, the GUI will offer to restore this state — it can automatically reconnect to the same backend and port, reapply your preset, and even return to the last saved position (with safety checks if the device has moved or been re-homed in the meantime). This makes it convenient to power cycle or restart the system and continue where you left off.</li>
 </ol>
 
 <h3>Command-Line Interface (CLI, without Docker)</h3>
@@ -212,7 +217,11 @@ If you prefer to run the controller without Docker or integrate it into other Py
 <ol>
   <li>
     Set up a Python 3.10+ environment. Create and activate a virtual environment, then install the required libraries:
-    <pre><code>cd TDC001-Docker/code<br>python3 -m venv venv<br>source venv/bin/activate  # (Linux/Mac)<br>venv\Scripts\activate    # (Windows)<br>pip install -r requirements.lock</code></pre>
+    <pre><code>    cd TDC001-Docker/Code
+    python3 -m venv venv
+    source venv/bin/activate  # (Linux/Mac) 
+    venv\Scripts\activate    # (Windows)
+    pip install -r requirements.lock </code> </pre>
     (We provide a <code>requirements.lock</code> file for reproducible installations. You can also install the core dependencies manually: FastAPI, PySerial, <code>thorlabs-apt-device</code>, etc.)
   </li>
   <br>
@@ -224,16 +233,29 @@ If you prefer to run the controller without Docker or integrate it into other Py
   </li>
   <br>
   <li>
-    Use the Python API in your own code. You can import the classes/functions to integrate the controller logic elsewhere. For example:
-    <pre><code>from tdc001 import TDCController, find_tdc001_ports
-
-ports = find_tdc001_ports()
-if ports:
-    controller = TDCController(serial_port=ports[0])
-    controller.move_relative(1024)  # move by 1024 steps
-    controller.close()</code></pre>
-    The <code>TDCController</code> class is designed to be beginner-friendly and heavily commented. Check out <code>tdc001.py</code> for all available methods and details.
+  
+  <strong>Use the Python API in your own code.</strong>
+    You can import the classes/functions to integrate the controller logic elsewhere.
+    For example:
+  
+  <pre><code class="language-python">
+  from tdc001 import TDCController, find_tdc001_ports
+  ports = find_tdc001_ports()
+    
+  if ports:
+      controller = TDCController(serial_port=ports[0])
+      controller.move_relative(1024)  # move by 1024 steps
+      controller.close()
+  </code> </pre>
+  
+  <p>
+      The <code>TDCController</code> class is designed to be beginner-friendly and heavily
+      commented. See <code>tdc001.py</code> for all available methods and details.
+  </p>
+  
   </li>
+
+
 </ol>
 <p>
 ⚠️ <strong>Note:</strong> If you encounter permission issues accessing the serial port on Linux, ensure your user is in the appropriate group (e.g. <code>dialout</code>) or run the Docker container with <code>--privileged</code>. Avoid using <code>sudo</code> to run Python or activate environments, as it can cause other issues. Instead, fix the underlying permission (for example, by adjusting udev rules or adding your user to the dialout group).
@@ -250,14 +272,14 @@ if ports:
 <!-- ROADMAP -->
 <h2 id="roadmap">🗺️ Roadmap</h2>
 <ul>
-  <li>[x] Dockerized CLI release (completed 2024)</li>
-  <li>[x] FastAPI backend service (completed 2025-05)</li>
-  <li>[x] PyQt6/noVNC GUI frontend (completed 2025-06)</li>
+  <li>[x] Dockerized CLI release </li>
+  <li>[x] FastAPI backend service </li>
+  <li>[x] PyQt6/noVNC GUI frontend </li>
   <li>[ ] Cross-platform auto-installer script for easier setup</li>
   <li>[ ] Windows-only driver support (investigate Wine/Proton for Thorlabs DLLs)</li>
   <li>[ ] One-click launcher or desktop shortcut for end-users</li>
 </ul>
-<p>We welcome feedback and feature requests! Please use the GitHub Issues page for any suggestions or bug reports.</p>
+<p>I welcome feedback and feature requests! Please use the GitHub Issues page for any suggestions or bug reports.</p>
 
 <!-- TROUBLESHOOTING -->
 <h2 id="troubleshooting">🧠 Troubleshooting</h2>
